@@ -2,108 +2,147 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attendance Report</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" rel="stylesheet">
-  <link href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-  <style>
-    body {
-      padding: 2rem;
-      background-color: #f0f2f5;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        /* Adjust the body and container to avoid scroll bars */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 300% 300%;
+            animation: gradientShift 10s ease infinite;
+        }
 
-    h1 {
-      margin-bottom: 2rem;
-      color: #495057;
-      text-align: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    .card {
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      background-color: white;
-      padding: 2rem;
-      margin-bottom: 3rem;
-    }
+        h1 {
+            margin-bottom: 2rem;
+            color: #ffffff;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+        }
 
-    .table-container {
-      max-width: 100%;
-      overflow-x: auto;
-    }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 2rem;
+            background-color: white;
+            animation: fadeInUp 1.5s ease-out;
+        }
 
-    table {
-      border-radius: 10px;
-      overflow: hidden;
-      width: 100%;
-    }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
-    /* Fixed header styling */
-    thead th {
-      background-color: #007bff !important;  /* Set a visible background color (blue) */
-      color: #ffffff !important;  /* Set the text color to white for better contrast */
-      font-size: 1.1rem;
-      padding: 15px;
-      text-align: center;
-    }
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
 
-    th,
-    td {
-      padding: 15px;
-      text-align: center;
-      vertical-align: middle;
-    }
+        table {
+            border-radius: 10px;
+            overflow: hidden;
+            width: 100%;
+        }
 
-    tbody tr:hover {
-      background-color: #f1f1f1;
-      cursor: pointer;
-    }
+        /* Fixed header styling */
+        thead th {
+            background-color: #1a2a6c !important;
+            color: #ffffff !important;
+            font-size: 1.1rem;
+            padding: 15px;
+            text-align: center;
+        }
 
-    .btn-success {
-      background-color: #28a745;
-      border: none;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
 
-    .btn-success:hover {
-      background-color: #218838;
-    }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      padding: 0.2rem 1rem;
-    }
+        .btn-success {
+            background-color: #fdbb2d;
+            color: #1a2a6c;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
 
-    footer {
-      text-align: center;
-      margin-top: 2rem;
-      color: #6c757d;
-    }
-  </style>
+        .btn-success:hover {
+            background-color: #1a2a6c;
+            color: #ffffff;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0.2rem 1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .author-name {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.9rem;
+            color: #ffffff;
+            opacity: 0.8;
+            font-style: italic;
+        }
+    </style>
 </head>
 
 <body>
 <div class="container">
-  <h1><i class="fa fa-chart-bar"></i> Attendance Data for {{ month or 'All Months' }}</h1>
-  <div class="card">
-    <div class="table-container">
-      {{ table | safe }}
+    <h1><i class="fa fa-chart-bar"></i> Attendance Data for {{ month or 'All Months' }}</h1>
+    <div class="card">
+        <div class="table-container">
+            {{ table | safe }}
+        </div>
     </div>
-  </div>
-  <form action="/export" method="post" class="text-center">
-    <button type="submit" class="btn btn-success">
-      <i class="fa fa-file-export"></i> Export to Excel
-    </button>
-  </form>
+    <form action="/export" method="post" class="text-center">
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-file-export"></i> Export to Excel
+        </button>
+    </form>
 
-  <footer>
-    <p>&copy; 2024 iCal to Excel Converter</p>
-  </footer>
+    <footer>
+        <p>&copy; 2024 iCal to Excel Converter</p>
+    </footer>
+    <div class="author-name">
+        Author: Suraj Panda
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -111,21 +150,21 @@
 <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
 <script>
-  $(document).ready(function () {
-    $('table').DataTable({
-      "paging": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "lengthChange": false,
-      "pageLength": 10,
-      "language": {
-        "search": "_INPUT_",
-        "searchPlaceholder": "Search records..."
-      }
+    $(document).ready(function () {
+        $('table').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "lengthChange": false,
+            "pageLength": 10,
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search records..."
+            }
+        });
     });
-  });
 </script>
 </body>
 
