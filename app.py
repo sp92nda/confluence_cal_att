@@ -5,6 +5,11 @@ from datetime import datetime, date, timedelta
 from io import BytesIO
 from flask import Flask, request, render_template, send_file, session
 import re
+from dateutil.rrule import rrulestr
+from dateutil.parser import parse as dateutil_parse
+import pytz
+# Set a reasonable limit (e.g., 5 years from today)
+MAX_RECURRENCE_END_DATE = (datetime.now() + timedelta(days=1*365)).strftime("%Y%m%dT%H%M%SZ")
 
 app = Flask(__name__)
 
@@ -48,11 +53,17 @@ def clean_attendee(attendee):
 
 # Generate date range from start to end date (inclusive)
 def generate_date_range(start_date, end_date):
+    # Ensure both start_date and end_date are datetime objects
+    if isinstance(start_date, datetime) is False:
+        start_date = datetime.combine(start_date, datetime.min.time())
+    if isinstance(end_date, datetime) is False:
+        end_date = datetime.combine(end_date, datetime.min.time())
+
     delta = end_date - start_date
     for i in range(delta.days + 1):  # Include the end date
         yield start_date + timedelta(days=i)
 
-# Read the iCal file and process events
+
 def process_ical(ical_data):
     cal = Calendar.from_ical(ical_data)
 
@@ -65,9 +76,15 @@ def process_ical(ical_data):
             dtstart = component.get('dtstart')
             dtend = component.get('dtend')
             attendees = component.get('attendee')
+            rrule = component.get('rrule')  # Get the RRULE property if it exists
 
             if dtstart:
                 dtstart = dtstart.dt  # Extract the start date
+
+                # If dtstart is a date object, convert it to a datetime object at midnight
+                if isinstance(dtstart, datetime) is False:
+                    dtstart = datetime.combine(dtstart, datetime.min.time())
+
                 dtend = dtend.dt if dtend else dtstart  # Handle single-day events
 
                 # Ensure dtend is exclusive for multi-day events
@@ -75,6 +92,29 @@ def process_ical(ical_data):
                     dtend = dtstart  # Single-day event
                 else:
                     dtend = dtend - timedelta(days=1)  # Adjust to make dtend exclusive
+
+                event_dates = []
+
+                if rrule:
+                    rrule_str = str(rrule.to_ical().decode('utf-8'))
+
+                    # Option 1: Ensure DTSTART is timezone-aware (UTC)
+                    if dtstart.tzinfo is None:
+                        dtstart = dtstart.replace(tzinfo=pytz.UTC)
+
+                    # If RRULE lacks UNTIL or COUNT, add an UNTIL date to cap it
+                    if 'UNTIL' not in rrule and 'COUNT' not in rrule:
+                        # Inject an UNTIL value that is 5 years from now
+                        rrule_str = rrule_str.strip() + f";UNTIL={MAX_RECURRENCE_END_DATE}"
+
+                    # Parse the updated RRULE with the new UNTIL value
+                    rule = rrulestr(rrule_str, dtstart=dtstart)
+
+                    # Generate the list of event dates
+                    event_dates = list(rule)
+                else:
+                    # If no RRULE, treat it as a normal event
+                    event_dates = list(generate_date_range(dtstart, dtend))
 
                 # Ensure we have attendees, could be a single value or list
                 if attendees:
@@ -90,13 +130,9 @@ def process_ical(ical_data):
 
                         for email in attendee_emails:
                             if email:
-                                # Handle multi-day events by iterating over each day
-                                for event_day in generate_date_range(dtstart, dtend):
+                                # For recurring events, iterate over each date in event_dates
+                                for event_day in event_dates:
                                     month_year = get_month_year(event_day)
-                                    if "2024-08" in str(month_year):
-                                        sequence = component.get('sequence')  # Get the sequence property of the event
-                                        print(attendee_data[email][month_year][category], sequence, email, summary,dtstart ,dtend)
-
                                     attendee_data[email][month_year][category] += 1
                 else:
                     print(f"Error: ATTENDEE not found for event {summary}.")
