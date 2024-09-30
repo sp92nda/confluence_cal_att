@@ -116,8 +116,6 @@
         }
         .card {
             border: none; /* Removes the border around the form */
-            {#box-shadow: none; /* Removes any shadow that might give the appearance of a border */#}
-            {#background-color: transparent; /* Makes the background of the form transparent */#}
         }
     </style>
 </head>
@@ -138,11 +136,24 @@
                 <input type="file" name="file" class="form-control" accept=".ics" required />
             </div>
             <div class="mb-3">
-                <label for="month" class="form-label">
-                    <i class="fa fa-calendar"></i> Select Month (YYYY-MM):
+                <label for="year" class="form-label">
+                    <i class="fa fa-calendar"></i> Select Year:
                 </label>
-                <input type="text" id="month" name="month" class="form-control" placeholder="e.g., 2024-09" />
+                <select id="year" class="form-control">
+                    <!-- Years will be populated by JavaScript -->
+                </select>
             </div>
+            <div class="mb-3">
+                <label for="month" class="form-label">
+                    <i class="fa fa-calendar"></i> Select Month:
+                </label>
+                <select id="month" class="form-control">
+                    <!-- Months will be populated by JavaScript -->
+                </select>
+            </div>
+            <!-- Hidden input to store the final "YYYY-MM" value -->
+            <input type="hidden" id="finalMonth" name="month" value="" />
+
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-eye"></i> Display Data
@@ -172,6 +183,66 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
+
+    // Populate year and month dropdowns
+    document.addEventListener('DOMContentLoaded', function () {
+        var now = new Date();
+        var currentYear = now.getFullYear();
+        var currentMonth = now.getMonth() + 1; // Months are zero-indexed
+
+        // Populate the year dropdown (5 years range: current year +/- 2 years)
+        var yearDropdown = document.getElementById('year');
+        for (var i = currentYear - 2; i <= currentYear + 2; i++) {
+            var option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            if (i === currentYear) {
+                option.selected = true; // Set current year as default
+            }
+            yearDropdown.add(option);
+        }
+
+        // Populate the month dropdown
+        var monthDropdown = document.getElementById('month');
+        var months = [
+            { value: '01', name: 'January' },
+            { value: '02', name: 'February' },
+            { value: '03', name: 'March' },
+            { value: '04', name: 'April' },
+            { value: '05', name: 'May' },
+            { value: '06', name: 'June' },
+            { value: '07', name: 'July' },
+            { value: '08', name: 'August' },
+            { value: '09', name: 'September' },
+            { value: '10', name: 'October' },
+            { value: '11', name: 'November' },
+            { value: '12', name: 'December' }
+        ];
+
+        months.forEach(function (month) {
+            var option = document.createElement('option');
+            option.value = month.value;
+            option.text = month.name;
+            if (month.value == String(currentMonth).padStart(2, '0')) {
+                option.selected = true; // Set current month as default
+            }
+            monthDropdown.add(option);
+        });
+
+        // Update the hidden input to pass the final "YYYY-MM" value on form submission
+        function updateFinalMonth() {
+            var selectedYear = yearDropdown.value;
+            var selectedMonth = monthDropdown.value;
+            document.getElementById('finalMonth').value = selectedYear + '-' + selectedMonth;
+        }
+
+        // Trigger the hidden input update when the dropdown values change
+        yearDropdown.addEventListener('change', updateFinalMonth);
+        monthDropdown.addEventListener('change', updateFinalMonth);
+
+        // Initialize the hidden input with the default value on page load
+        updateFinalMonth();
+    });
 
     // Simulate file upload progress
     $('#upload-form').on('submit', function (e) {
