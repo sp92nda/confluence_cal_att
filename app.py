@@ -153,11 +153,12 @@ def generate_report(attendee_data, selected_month=None):
             row = {
                 'Attendee': attendee,
                 'Month': month,
-                'WFO_count': categories.get('WFO', 0),
-                'WFH_count': categories.get('WFH', 0),
-                'Leave_count': categories.get('Leave', 0),
-                'PL_count': categories.get('PL', 0),
-                'Other_count': categories.get('Other', 0)
+                'WFO': categories.get('WFO', 0),
+                'WFH': categories.get('WFH', 0),
+                'Leave': categories.get('Leave', 0) + categories.get('PL', 0),
+                'Other': categories.get('Other', 0),
+                'Total Days': categories.get('WFO', 0) + categories.get('WFH', 0) + categories.get('Leave', 0) +
+                              categories.get('Leave', 0) + categories.get('PL', 0) + categories.get('Other', 0),
             }
             report_rows.append(row)
 
