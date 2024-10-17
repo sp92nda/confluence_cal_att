@@ -170,6 +170,10 @@ def generate_report(attendee_data, selected_month=None):
 def index():
     return render_template('index.html')
 
+@app.route('/x-heal')
+def automation():
+    return render_template('web_index.html')
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
