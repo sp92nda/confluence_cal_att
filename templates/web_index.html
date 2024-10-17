@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Heal Automation Test</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="static/web_styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="header">
+    <!-- Warner Bros Discovery Logo -->
+    <img src="static/images/logo.png" alt="Warner Bros Discovery Logo" class="logo">
+    <h1>Automation Test Page For X-Heal Hackathon</h1>
+    <!-- Dark Mode Toggle Switch -->
+    <div class="toggle-switch">
+        <input type="checkbox" id="theme-toggle" aria-label="Toggle Dark Mode">
+        <label for="theme-toggle" class="switch"></label>
+    </div>
+</header>
+
+<main class="wrapper">
+    <section class="main-container">
+        <!-- Left Column: Form Controls -->
+        <div class="left-column">
+            <h2><i class="fas fa-cogs"></i> Set Attributes</h2>
+
+            <form id="attribute-form" novalidate>
+                <div class="form-group">
+                    <label for="attribute">Choose Attribute (ID or Class):</label>
+                    <select id="attribute" required aria-required="true">
+                        <option value="" disabled selected>Select attribute</option>
+                        <option value="id">ID</option>
+                        <option value="class">Class</option>
+                    </select>
+                    <span class="error-message" id="attribute-error">Please select an attribute.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="attribute-value">Enter Value for ID or Class:</label>
+                    <input type="text" id="attribute-value" placeholder="Enter value..." required aria-required="true">
+                    <span class="error-message" id="attribute-value-error">This field cannot be empty.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="user-text">Enter some text:</label>
+                    <input type="text" id="user-text" placeholder="Type something..." required aria-required="true">
+                    <span class="error-message" id="user-text-error">This field cannot be empty.</span>
+                </div>
+
+                <div class="buttons-container">
+                    <button type="button" onclick="applyAttribute()"><i class="fas fa-save"></i> Save Attribute</button>
+                    <button type="button" onclick="displayText()"><i class="fas fa-eye"></i> Display Text</button>
+                    <button type="button" onclick="clearOutput()"><i class="fas fa-eraser"></i> Clear Output</button>
+                    <button type="reset" onclick="resetForm()"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Column: Display Output -->
+        <div class="right-column">
+            <h2><i class="fas fa-display"></i> Live Text Display</h2>
+            <div id="text-output" class="output" aria-live="polite">Your text will appear here...</div>
+            <button id="copy-button" onclick="copyText()"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+    </section>
+</main>
+
+<!-- Notification Area -->
+<div id="notification" class="notification" role="alert" aria-live="assertive"></div>
+
+<!-- SVG Decorative Element -->
+<svg class="decorative-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <path d="M0,100 C50,0 50,0 100,100 Z" fill="var(--secondary-color)" opacity="0.2"/>
+</svg>
+
+<!-- External JavaScript -->
+<script src="static/web_script.js"></script>
+
+</body>
+</html>

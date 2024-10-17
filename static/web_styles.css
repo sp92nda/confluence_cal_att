@@ -1,0 +1,423 @@
+/* CSS Variables for Warner Bros Discovery Colors */
+:root {
+    --primary-color: #0C2340; /* Dark Blue */
+    --secondary-color: #FDB827; /* Gold */
+    --accent-color: #2B6CB0; /* Light Blue */
+    --text-color: #FFFFFF; /* White */
+    --background-color: #0C2340; /* Dark Blue */
+    --input-bg: rgba(240, 240, 240, 0.1); /* Light Gray with opacity */
+    --header-bg: rgba(12, 35, 64, 0.9); /* Semi-transparent Dark Blue */
+    --button-bg: linear-gradient(145deg, #FDB827, #2B6CB0);
+    --button-hover-bg: linear-gradient(145deg, #2B6CB0, #FDB827);
+    --notification-bg: rgba(255, 255, 255, 0.2);
+    --border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Dark Mode Variables */
+body.dark-mode {
+    --primary-color: #FFFFFF; /* White */
+    --secondary-color: #FDB827; /* Gold */
+    --accent-color: #2B6CB0; /* Light Blue */
+    --text-color: #0C2340; /* Dark Blue */
+    --background-color: #FFFFFF; /* White */
+    --input-bg: rgba(12, 35, 64, 0.1); /* Dark Blue with opacity */
+    --header-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent White */
+    --button-bg: linear-gradient(145deg, #2B6CB0, #FDB827);
+    --button-hover-bg: linear-gradient(145deg, #FDB827, #2B6CB0);
+    --notification-bg: rgba(0, 0, 0, 0.2);
+    --border-color: rgba(0, 0, 0, 0.3);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: radial-gradient(circle, var(--background-color), var(--accent-color));
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: background 0.5s, color 0.5s;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: var(--header-bg);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.5s;
+}
+
+.header .logo {
+    height: 50px; /* Adjusted height */
+    width: auto;
+    max-width: 150px; /* Ensures the logo doesn't exceed 150px */
+    object-fit: contain;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Toggle Switch Styling */
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch .switch {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.toggle-switch .switch:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .switch {
+    background-color: var(--accent-color);
+}
+
+.toggle-switch input:checked + .switch:before {
+    transform: translateX(26px);
+}
+
+.toggle-switch .switch:active:before {
+    width: 28px;
+    height: 28px;
+}
+
+/* Wrapper */
+.wrapper {
+    width: 90%;
+    max-width: 1400px;
+    padding: 40px 20px;
+    margin: 0 auto;
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0px 25px 80px rgba(0, 0, 0, 0.4);
+    transition: background 0.5s, box-shadow 0.5s;
+}
+
+/* Columns */
+.left-column, .right-column {
+    flex: 1 1 400px;
+    padding: 20px;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid var(--border-color);
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Headings */
+.left-column h2, .right-column h2 {
+    font-size: 26px;
+    margin-bottom: 25px;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Form Styling */
+form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--secondary-text-color);
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--input-bg);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    color: var(--text-color);
+    box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    transition: box-shadow 0.4s ease, background-color 0.4s ease;
+}
+
+input[type="text"]::placeholder, select::placeholder {
+    color: var(--secondary-text-color);
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+button {
+    padding: 14px 30px;
+    background: var(--button-bg);
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff; /* Ensures button text is always readable */
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease, box-shadow 0.3s;
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+button:hover {
+    background: var(--button-hover-bg);
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button[type="reset"] {
+    background: linear-gradient(145deg, #6c757d, #5a6268);
+}
+
+button[type="reset"]:hover {
+    background: linear-gradient(145deg, #5a6268, #6c757d);
+}
+
+/* Output Area */
+.output {
+    background: var(--input-bg);
+    padding: 25px;
+    border-radius: 15px;
+    color: var(--text-color);
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+#copy-button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: linear-gradient(145deg, #1e90ff, #3742fa);
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#copy-button:hover {
+    background: linear-gradient(145deg, #3742fa, #1e90ff);
+    transform: scale(1.05);
+}
+
+/* Notification Styling */
+.notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--notification-bg);
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 16px;
+    color: var(--text-color);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.5s ease, fadeOut 0.5s ease 2.5s;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Error Messages */
+.error-message {
+    display: none;
+    color: #ff6b6b;
+    font-size: 12px;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+/* Decorative SVG Styling */
+.decorative-svg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: -1;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .left-column {
+        border-right: none;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .buttons-container {
+        flex-direction: column;
+    }
+
+    button {
+        min-width: 100%;
+    }
+
+    .decorative-svg {
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .main-container {
+        padding: 20px 10px;
+    }
+
+    .left-column h2, .right-column h2 {
+        font-size: 22px;
+    }
+
+    .output {
+        font-size: 18px;
+    }
+
+    /* Adjust toggle switch size for smaller screens */
+    .toggle-switch {
+        width: 40px;
+        height: 20px;
+    }
+
+    .toggle-switch .switch:before {
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+    }
+
+    .toggle-switch input:checked + .switch:before {
+        transform: translateX(20px);
+    }
+}
