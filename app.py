@@ -3,7 +3,7 @@ import pandas as pd
 from collections import defaultdict
 from datetime import datetime, date, timedelta
 from io import BytesIO
-from flask import Flask, request, render_template, send_file, session
+from flask import Flask, request, render_template, send_file, session, flash
 import re
 from dateutil.rrule import rrulestr
 from dateutil.parser import parse as dateutil_parse
@@ -214,6 +214,30 @@ def export_data():
 
     # Send the Excel file as a response
     return send_file(output, download_name='filtered_attendance_report.xlsx', as_attachment=True)
+
+
+@app.route('/confluence', methods=['GET', 'POST'])
+def confluence_data_display():
+    EMAIL = request.args.get('email')
+    API_TOKEN = request.args.get('api_token')
+    CALENDAR_ID = request.args.get('calender_id')
+    if not EMAIL or not API_TOKEN or not CALENDAR_ID:
+        # Render a form for the user to input the missing data
+        flash('Missing required parameters: email, API token, and/or calendar ID.', 'warning')
+        return render_template('warnning.html')  # Render a form for the user to fill the data
+
+    from utility.calendar_service import Config, CalendarService
+    config = Config()
+    config.update_datas(EMAIL, API_TOKEN, CALENDAR_ID)
+    calendar_service = CalendarService(config)
+    selected_month = request.form.get('month')  # Get selected month from form
+    df_report = calendar_service.generate_report(calendar_service.process_event_data(), selected_month)
+    # Save the DataFrame to session to export later
+    session['df_report'] = df_report.to_dict()  # Convert to dictionary to store in session
+    html_table = df_report.to_html(classes='table table-striped table-hover table-bordered', index=False)
+    # Render the report page with the table and export button
+    return render_template('attendance_report.html', month=selected_month, table=html_table)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
