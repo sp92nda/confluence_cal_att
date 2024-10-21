@@ -22,7 +22,7 @@ class Config:
     """
 
     def __init__(self):
-        self.confluence_base_url = os.getenv('CONFLUENCE_BASE_URL')  # Confluence base URL
+        self.confluence_base_url = os.getenv('CONFLUENCE_BASE_URL', 'https://wbdstreaming.atlassian.net/wiki')  # Confluence base URL
         self.email = os.getenv('EMAIL')  # Atlassian account email
         self.api_token = os.getenv('API_TOKEN')  # API token
         self.calendar_id = os.getenv('CALENDAR_ID', '').split(',')  # Calendar ID
